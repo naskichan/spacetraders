@@ -1,5 +1,5 @@
 import { faBoltLightning, faBox, faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
-import ConditionBar from "./ConditionBar";
+import ConditionBar from "../atoms/ConditionBar";
 import InfoChip from "../atoms/InfoChip";
 
 interface Props {
