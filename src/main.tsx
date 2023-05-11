@@ -6,6 +6,7 @@ import './index.css'
 import BaseComponent from './components/molecules/BaseComponent.tsx'
 import { faHome, faMap, faSpaceShuttle } from '@fortawesome/free-solid-svg-icons'
 import Ships from './pages/Ships.tsx'
+import Map from './pages/Map.tsx'
 
 const nav = [
   {
@@ -24,7 +25,7 @@ const nav = [
     label: "Map",
     path: "/map",
     icon: faMap,
-    component: <App />
+    component: <Map />
   }
 
 ]
