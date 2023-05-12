@@ -1,10 +1,9 @@
-import { faAnchor, faArrowUpRightFromSquare, faEarth, faInfoCircle, faShuttleSpace } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faBoxesStacked, faInfoCircle, faShuttleSpace } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from "react-tooltip";
 import Cargo from "./Cargo";
 import Navigation from "./Navigation";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import GeneralInfo from "./GeneralInfo";
 import Modules from "./Modules";
 import Mounts from "./Mounts";
@@ -15,19 +14,7 @@ interface Props {
 }
 
 function Ship(props: Props) {
-    const shipStatusIcon = determineShipStatusIcon();
-    function determineShipStatusIcon() {
-        switch (props.ship.nav.status) {
-            case "DOCKED":
-                return faAnchor as IconProp;
-            case "IN_TRANSIT":
-                return faShuttleSpace as IconProp;
-            case "IN_ORBIT":
-                return faEarth as IconProp;
-            default:
-                return faAnchor as IconProp;
-        }
-    }
+    
     return (
         <div className="
             rounded
@@ -43,7 +30,7 @@ function Ship(props: Props) {
                     font-bold
                 ">{props.ship.symbol}</h1>
                 <div className="flex bg-onyx rounded-xl p-2">
-                    <FontAwesomeIcon icon={shipStatusIcon} />
+                    <FontAwesomeIcon icon={faBoxesStacked} />
                 </div>
             </div>
             <span className="flex gap-2 items-center pb-2 text-neutral-300 uppercase border-b border-onyx">
@@ -53,7 +40,7 @@ function Ship(props: Props) {
                         <Tooltip id="info" place="bottom" content={props.ship.frame.description} />
                     </div>
             </span>
-            <Navigation nav={props.ship.nav} />
+            <Navigation consumed={props.ship.fuel.consumed} nav={props.ship.nav} />
             <GeneralInfo ship={props.ship} />
             <Cargo cargo={props.ship.cargo}/>
             <Modules modules={props.ship.modules} />
