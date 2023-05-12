@@ -3,7 +3,7 @@ import Consumed from "../../types/Consumed";
 import NavType from "../../types/Nav";
 import Consumption from "./Consumption";
 import FlightModeSwitch from "./FlightModeSwitch";
-import { faAnchor, faEarth, faShuttleSpace, faSpaceShuttle } from "@fortawesome/free-solid-svg-icons";
+import { faAnchor, faShuttleSpace, } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
