@@ -18,6 +18,9 @@ function Navigation(props: Props) {
                 <FlightModeSwitch onClick={changeFlightMode} selectedMode={props.nav.flightMode} />
                 <Consumption consumption={consumption} />
             </div>
+            <div className="flex flex-row justify-between gap-2 items-center">
+                props.nav.
+            </div>
         </div>
     )
 }

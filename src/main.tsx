@@ -7,6 +7,7 @@ import BaseComponent from './components/molecules/BaseComponent.tsx'
 import { faHome, faMap, faSpaceShuttle } from '@fortawesome/free-solid-svg-icons'
 import Ships from './pages/Ships.tsx'
 import Map from './pages/Map.tsx'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const nav = [
   {
@@ -30,19 +31,23 @@ const nav = [
 
 ]
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <script src="https://kit.fontawesome.com/76602e036c.js" crossOrigin="anonymous"></script>
-    <BrowserRouter>
-      <Routes>
-        {nav.map((item) => (
-          <Route key={item.path} path={item.path} element={
-            <BaseComponent navItems={nav}>
-              {item.component}
-            </BaseComponent>
-          } />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {nav.map((item) => (
+            <Route key={item.path} path={item.path} element={
+              <BaseComponent navItems={nav}>
+                {item.component}
+              </BaseComponent>
+            } />
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>,
 )
