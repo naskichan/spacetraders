@@ -9,7 +9,7 @@ interface Props {
 function Mounts(props: Props) {
     return (
         <Collapsible title={"Mounts"}>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 select-none">
                 {props.mounts.map((mount) => (
                     <Item key={mount.symbol} mount={mount} />
                 ))}

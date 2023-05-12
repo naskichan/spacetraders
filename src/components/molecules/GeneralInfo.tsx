@@ -8,7 +8,7 @@ interface Props {
 
 function GeneralInfo(props: Props) {
     return (
-        <div className="flex gap-3 py-4 justify-between flex-wrap">
+        <div className="flex gap-3 py-4 justify-between flex-wrap select-none">
             <ConditionBar type="health" label="Hull" value={props.ship.frame.condition} maxValue={100}/>
             <ConditionBar type="health" label="Engine" value={props.ship.engine.condition} maxValue={100} />
             <ConditionBar full type="fuel" label="Fuel" value={props.ship.fuel.current} maxValue={props.ship.fuel.capacity} />

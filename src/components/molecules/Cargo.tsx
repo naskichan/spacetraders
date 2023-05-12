@@ -64,6 +64,7 @@ function Cargo(props: Props) {
                 gap-2
                 text-xl
                 font-bold
+                select-none
             ">  
                 {items.map((item) => (
                     <Item key={item.symbol} inventoryItem={item} />

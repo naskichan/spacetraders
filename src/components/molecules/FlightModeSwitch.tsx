@@ -5,7 +5,7 @@ interface Props {
 
 function FlightModeSwitch(props: Props) {
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row select-none">
             <button onClick={() => props.selectedMode !== 'CRUISE' && props.onClick('CRUISE')} className={`
                 font-light
                 text-l

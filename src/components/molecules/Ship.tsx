@@ -1,4 +1,4 @@
-import { faArrowUpRightFromSquare, faBoxesStacked, faInfoCircle, faShuttleSpace } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faBars, faInfoCircle, faShuttleSpace } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from "react-tooltip";
@@ -8,33 +8,38 @@ import GeneralInfo from "./GeneralInfo";
 import Modules from "./Modules";
 import Mounts from "./Mounts";
 import Button from "../atoms/Button";
+import { useState } from "react";
 
 interface Props {
     ship: any;
 }
 
 function Ship(props: Props) {
+    const [collapsed, setCollapsed] = useState<boolean>(true);
     
     return (
-        <div className="
-            rounded
+        <div className={`
+            rounded-l-xl
+            ${collapsed ? 'rounded-r-xl' : ''}
             p-4
             my-8
             mx-4
             bg-jet
             max-w-sm
-        ">
+            transition-all
+        
+        `}>
             <div className="flex flex-row justify-between items-center pb-2 border-onyx">
                 <h1 className="
                     text-2xl
                     font-bold
                 ">{props.ship.symbol}</h1>
-                <div className="flex bg-onyx rounded-xl p-2">
-                    <FontAwesomeIcon icon={faBoxesStacked} />
+                <div className="flex bg-onyx rounded-xl p-3 hover:bg-neutral-600 transition cursor-pointer" onClick={() => {setCollapsed(!collapsed)}}>
+                    <FontAwesomeIcon icon={faBars} />
                 </div>
             </div>
             <span className="flex gap-2 items-center pb-2 text-neutral-300 uppercase border-b border-onyx">
-                    <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-row gap-2 items-center select-none">
                         <p>{props.ship.frame.name} </p>
                         <FontAwesomeIcon data-tooltip-id='info' icon={faInfoCircle} style={{color: "#df2935"}} />
                         <Tooltip id="info" place="bottom" content={props.ship.frame.description} />

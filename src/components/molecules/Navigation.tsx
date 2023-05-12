@@ -51,7 +51,7 @@ function Navigation(props: Props) {
                 <FlightModeSwitch onClick={changeFlightMode} selectedMode={props.nav.flightMode} />
                 <Consumption consumed={props.consumed} />
             </div>
-                <div className="flex flex-row gap-2 items-center mt-2">
+                <div className="flex flex-row gap-2 items-center mt-2 select-none">
                     <div className="flex flex-row gap-2 items-center">
                         <div className="rounded-xl px-2.5 py-2 bg-onyx">
                             <FontAwesomeIcon icon={shipStatusIcon} />

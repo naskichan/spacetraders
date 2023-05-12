@@ -9,7 +9,7 @@ interface Props {
 function Modules(props: Props) {
     return (
         <Collapsible title={"Modules"}>
-            <div className="flex flex-row flex-wrap gap-2">
+            <div className="flex flex-row flex-wrap gap-2 select-none">
                 {props.modules.map((module) => (
                     <Item key={module.symbol} module={module} />
                 ))}
