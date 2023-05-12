@@ -9,6 +9,7 @@ import Modules from "./Modules";
 import Mounts from "./Mounts";
 import Button from "../atoms/Button";
 import { useState } from "react";
+import ActionsMenu from "./ActionsMenu";
 
 interface Props {
     ship: any;
@@ -29,6 +30,7 @@ function Ship(props: Props) {
             transition-all
         
         `}>
+            <ActionsMenu />
             <div className="flex flex-row justify-between items-center pb-2 border-onyx">
                 <h1 className="
                     text-2xl
