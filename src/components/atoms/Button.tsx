@@ -23,12 +23,18 @@ function Button(props: Props) {
             border
             px-4
             rounded
+            flex
+            flex-row
+            justify-center
+            items-center
+            gap-2
             ${props.disabled ? 'bg-gray-500' : ''}
             ${props.disabled ? 'cursor-default' : ''}
             ${props.disabled ? 'hover:bg-gray-500' : ''}
             ${props.color === 'primary' ? 'bg-blue-500' : 'bg-red-500'}
             ${props.color === 'primary' ? 'hover:bg-blue-600' : 'hover:bg-red-600'}
             transition
+            select-none
         `}
         onClick={handleClick}
         >

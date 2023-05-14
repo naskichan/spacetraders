@@ -9,24 +9,34 @@ interface Props {
     inventoryItem?: InventoryItem;
     mount?: Mount;
     module?: Module;
+    selectable?: boolean;
+    selected?: boolean;
+    onSelect?: () => void;
 }
 
 function Item(props: Props) {
     return (
         <>
             {props.inventoryItem && (
-                <div className="
-                flex
-                relative
-                justify-center
-                items-center
-                bg-jet
-                rounded
-                border-2
-                border-onyx
-                h-16
-                w-16
-                " data-tooltip-id={`item-info-${props.inventoryItem.symbol}`}>
+                <div 
+                    className={`
+                        ${props.selected && "border-poppy bg-onyx"}
+                        flex
+                        ${props.selectable && "cursor-pointer hover:border-poppy hover:bg-onyx"}
+                        transition-all
+                        relative
+                        justify-center
+                        items-center
+                        bg-jet
+                        rounded
+                        border-2
+                        border-onyx
+                        h-16
+                        w-16
+                    `}
+                    data-tooltip-id={`item-info-${props.inventoryItem.symbol}`}
+                    onClick={props.selectable ? props.onSelect : () => {}}
+                >
                     <FontAwesomeIcon icon={faBox} />
                     <Tooltip id={`item-info-${props.inventoryItem.symbol}`} place="bottom" content={`${props.inventoryItem.name}: ${props.inventoryItem.description}`} />
                     <p className="absolute text-sm -right-2 -bottom-2 rounded-full px-1 bg-poppy ">

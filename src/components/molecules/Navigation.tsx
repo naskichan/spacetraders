@@ -46,7 +46,7 @@ function Navigation(props: Props) {
         }
     }
     return(
-        <div className="py-4 flex flex-col justify-between gap-2">
+        <div className="py-4 flex flex-col justify-between gap-2 border-b border-onyx">
             <div className="flex flex-row justify-between gap-2 items-center"> 
                 <FlightModeSwitch onClick={changeFlightMode} selectedMode={props.nav.flightMode} />
                 <Consumption consumed={props.consumed} />
