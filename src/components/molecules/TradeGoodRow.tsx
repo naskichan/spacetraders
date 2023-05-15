@@ -7,6 +7,7 @@ import { useState } from "react";
 interface Props {
     tradeGood: TradeGood;
     amountInStorage: number;
+    onTradeIntent: (symbol: string, amount: number, unitPrice: number) => void;
 }
 // Kinda unnecessary, but makes it easier to deal with a and an
 enum Supply {
@@ -38,6 +39,7 @@ export default function TradeGoodRow(props: Props) {
         if(value.match(regex)) return;
         const numValue = parseInt(value);
         if(numValue && numValue > 0 && numValue > props.amountInStorage) return;
+        if(numValue && numValue !== 0) props.onTradeIntent(props.tradeGood.symbol, numValue, props.tradeGood.sellPrice);
         setTradeValue(value);
     }
     function isMaxable() {
