@@ -7,6 +7,7 @@ import TradeModalTab from "./TradeModalTab";
 import { useQuery } from "react-query";
 import { queryKeys } from "../../queries/queryKeys";
 import { fetchMarket } from "../../queries/markets";
+import MarketTab from "./MarketTab";
 
 interface Props {
     close: () => void;
@@ -14,43 +15,14 @@ interface Props {
     systemSymbol: string;
     sellableItems: InventoryItem[];
 }
-interface TabItem {
-    label:string;
-    component: React.ReactNode;
-    selected: boolean;
-}
 
 function TradeMenuModal(props: Props) {
     const {
         data: marketData,
         isSuccess
     } = useQuery(queryKeys.market(props.waypointSymbol), () => fetchMarket(props.systemSymbol, props.waypointSymbol))
-    const [tabs, setTabs] = useState<TabItem[]>([
-        {
-            label: "Trader",
-            component: <div>Trader</div>,
-            selected: true,
-        },
-        {
-            label: "Exchange",
-            component: <div>Exchange</div>,
-            selected: false,
-        }
-    ]);
-    isSuccess && console.log(marketData);
+    const [selectedTab, setSelectedTab] = useState<string>("Market");
     const navigate = useNavigate();
-    function getSelectedTab(): TabItem {
-        return tabs.find((tab) => tab.selected) as TabItem;
-    }
-    function handleSwitchTab(tab: TabItem) {
-        const newTabs = tabs.map((item) => {
-            return {
-                ...item,
-                selected: item.label === tab.label,
-            }
-        });
-        setTabs(newTabs);
-    }
     return (
         <div className="absolute top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center">
             <div className="bg-jet rounded-xl p-4">
@@ -68,12 +40,19 @@ function TradeMenuModal(props: Props) {
                 </div>
                 <div className="flex flex-col mt-4 justify-center items-center">
                     <div className="flex bg-neutral-800 m-2 rounded-full">
-                        {tabs.map((tab) => (
-                            <TradeModalTab key={tab.label} label={tab.label} onSelect={() => handleSwitchTab(tab)} selected={tab.selected} />
-                        ))}
+                        <TradeModalTab label="Market" onSelect={() => setSelectedTab("Market")} selected={selectedTab === "Market"} />
+                        <TradeModalTab label="Exchange" onSelect={() => setSelectedTab("Exchange")} selected={selectedTab === "Exchange"} />
                     </div>
-                    <div className="bg-neutral-800 p-2 rounded-xl">
-                        {getSelectedTab().component}
+                    <div className="bg-neutral-800 rounded-xl">
+                        {isSuccess && (
+                            <>
+                                {selectedTab === "Market" ? (
+                                    <MarketTab inventoryItems={props.sellableItems} marketData={marketData} />
+                                ) : (
+                                    <p>Exchange</p>
+                                )}
+                            </>
+                        )}
                     </div>
 
                 </div>
