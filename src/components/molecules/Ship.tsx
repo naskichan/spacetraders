@@ -11,6 +11,9 @@ import Button from "../atoms/Button";
 import { useState } from "react";
 import ActionsMenu from "./ActionsMenu";
 import ShipType from "../../types/Ship";
+import { queryKeys } from "../../queries/queryKeys";
+import { useQuery } from "react-query";
+import { fetchWaypoint } from "../../queries/waypoints";
 
 interface Props {
     ship: ShipType;
@@ -18,6 +21,10 @@ interface Props {
 }
 
 function Ship(props: Props) {
+    const {
+        data: waypointData,
+        isSuccess
+    } = useQuery(queryKeys.waypoint(props.ship.nav.waypointSymbol), () => fetchWaypoint(props.ship.nav.systemSymbol, props.ship.nav.waypointSymbol));
     const [collapsed, setCollapsed] = useState<boolean>(true);
     
     return (
@@ -64,7 +71,14 @@ function Ship(props: Props) {
                 </div>
             </div>
                 <div className={`bg-neutral-800 p-4 rounded-r-xl select-none transition-all ${collapsed ? "w-0" : "w-1/2"}`}>
-                    <ActionsMenu orbitingAvailable={props.ship.nav.status !== "IN_ORBIT"} dockingAvailable={props.ship.nav.status !== "DOCKED"} scanningAvailable={props.ship.nav.status === "IN_ORBIT"} open={!collapsed} traderPresent={true} openTraderMenu={() => props.openTraderMenu(props.ship.nav.waypointSymbol, props.ship.nav.systemSymbol)} />
+                    <ActionsMenu 
+                        orbitingAvailable={props.ship.nav.status !== "IN_ORBIT"} 
+                        dockingAvailable={props.ship.nav.status !== "DOCKED"} 
+                        scanningAvailable={props.ship.nav.status === "IN_ORBIT"} 
+                        traderPresent={isSuccess && waypointData.traits.filter((trait) => trait.symbol === "MARKETPLACE").length > 0} 
+                        open={!collapsed} 
+                        openTraderMenu={() => props.openTraderMenu(props.ship.nav.waypointSymbol, props.ship.nav.systemSymbol)}
+                    />
                 </div>
         </div>
     )

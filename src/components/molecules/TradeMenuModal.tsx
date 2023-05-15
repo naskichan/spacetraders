@@ -2,8 +2,11 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import InventoryItem from '../../types/InventoryItem'
-import Item from "./Item";
 import { useState } from "react";
+import TradeModalTab from "./TradeModalTab";
+import { useQuery } from "react-query";
+import { queryKeys } from "../../queries/queryKeys";
+import { fetchMarket } from "../../queries/markets";
 
 interface Props {
     close: () => void;
@@ -11,36 +14,42 @@ interface Props {
     systemSymbol: string;
     sellableItems: InventoryItem[];
 }
-
-interface TradeItem {
-    item: InventoryItem;
+interface TabItem {
+    label:string;
+    component: React.ReactNode;
     selected: boolean;
-    price: number;
 }
 
 function TradeMenuModal(props: Props) {
-    const [tradeItems, setTradeItems] = useState<TradeItem[]>( new Array(10).fill({
-        item: {
-            symbol: "test",
-            name: "test",
-            description: "test",
-            units: 1
+    const {
+        data: marketData,
+        isSuccess
+    } = useQuery(queryKeys.market(props.waypointSymbol), () => fetchMarket(props.systemSymbol, props.waypointSymbol))
+    const [tabs, setTabs] = useState<TabItem[]>([
+        {
+            label: "Trader",
+            component: <div>Trader</div>,
+            selected: true,
         },
-        selected: false,
-        price: 10,
-    }));
+        {
+            label: "Exchange",
+            component: <div>Exchange</div>,
+            selected: false,
+        }
+    ]);
+    isSuccess && console.log(marketData);
     const navigate = useNavigate();
-    function handleSelect(tradeItem: TradeItem) {
-        const newTradeItems = tradeItems.map((item) => {
-            if (item === tradeItem) {
-                return {
-                    ...item,
-                    selected: !item.selected
-                }
+    function getSelectedTab(): TabItem {
+        return tabs.find((tab) => tab.selected) as TabItem;
+    }
+    function handleSwitchTab(tab: TabItem) {
+        const newTabs = tabs.map((item) => {
+            return {
+                ...item,
+                selected: item.label === tab.label,
             }
-            return item;
-        })
-        setTradeItems(newTradeItems);
+        });
+        setTabs(newTabs);
     }
     return (
         <div className="absolute top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center">
@@ -57,23 +66,16 @@ function TradeMenuModal(props: Props) {
                         <FontAwesomeIcon icon={faClose}  />
                     </button>
                 </div>
-                <div className="flex flex-row gap-2 justify-between">
-                    <div className="w-96 flex flex-col">
-                        <h2 className="text-2xl font-bold">Buy</h2>
-                        <div className="flex flex-row gap-2 flex-wrap">
-                            {tradeItems.map((tradeItem) => (
-                                <Item inventoryItem={tradeItem.item} selectable selected={tradeItem.selected} onSelect={() => handleSelect(tradeItem)}/>
-                            ))}
-                        </div>
+                <div className="flex flex-col mt-4 justify-center items-center">
+                    <div className="flex bg-neutral-800 m-2 rounded-full">
+                        {tabs.map((tab) => (
+                            <TradeModalTab key={tab.label} label={tab.label} onSelect={() => handleSwitchTab(tab)} selected={tab.selected} />
+                        ))}
                     </div>
-                    <div className="w-96 flex flex-col">
-                        <h2 className="text-2xl font-bold">Sell</h2>
-                        <div className="flex flex-row gap-2 flex-wrap">
-                            {tradeItems.map((tradeItem) => (
-                                <Item inventoryItem={tradeItem.item} selectable selected={tradeItem.selected} onSelect={() => handleSelect(tradeItem)}/>
-                            ))}
-                        </div>
+                    <div className="bg-neutral-800 p-2 rounded-xl">
+                        {getSelectedTab().component}
                     </div>
+
                 </div>
             </div>
         </div>
