@@ -24,3 +24,26 @@ export const purchaseCargo = async (shipSymbol: string, tradeIntent: TradeIntent
     );
     return result;
 }
+
+export const sellCargo = async (shipSymbol: string, tradeIntent: TradeIntent) => {
+    console.log("Sending this request", {
+        url: `${import.meta.env.VITE_API_URL}/my/ships/${shipSymbol}/purchase`,
+        data: {
+            symbol: tradeIntent.symbol,
+            units: Math.abs(tradeIntent.amount),
+        },
+    });
+
+    const result = await axios.post(`${import.meta.env.VITE_API_URL}/my/ships/${shipSymbol}/sell`,
+        {
+            symbol: tradeIntent.symbol,
+            units: Math.abs(tradeIntent.amount),
+        },
+        {
+            headers: {
+                Authorization: bearerToken,
+            },
+        }
+    );
+    return result;
+}

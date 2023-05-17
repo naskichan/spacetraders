@@ -9,8 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLayerGroup, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import { useMutation, useQueryClient } from "react-query";
-import { purchaseCargo } from "../../queries/mutations/trade";
+import { purchaseCargo, sellCargo } from "../../queries/mutations/trade";
 import { queryKeys } from "../../queries/queryKeys";
+import TradeGood from "../../types/TradeGood";
 
 interface Props {
     marketData: MarketData;
@@ -29,14 +30,24 @@ export default function  MarketTab(props: Props) {
                 return purchaseCargo(props.shipSymbol, tradeIntent)
             })
         )
+    },
+    {
+       onSuccess: () => {
+            queryClient.refetchQueries([queryKeys.agent, queryKeys.ships]);
+       } 
     });
     const {mutateAsync: mutateSales, isLoading: salesLoading} = useMutation(async (tradeIntents: TradeIntent[]) => {
         await Promise.all(
             tradeIntents.map((tradeIntent) => {
-                return purchaseCargo(props.shipSymbol, tradeIntent)
+                return sellCargo(props.shipSymbol, tradeIntent)
             })
         )
-    });
+    },
+    {
+        onSuccess: () => {
+             queryClient.refetchQueries([queryKeys.agent, queryKeys.ships]);
+        } 
+     });
     function handleTradeIntent(symbol: string, amount: number, unitPrice: number) {
         const newTrades = tradeIntents.filter((trade) => trade.symbol !== symbol);
         if(amount === 0) {
@@ -60,15 +71,19 @@ export default function  MarketTab(props: Props) {
         if (sales.length) await mutateSales(sales);
         const purchases = tradeIntents.filter((tradeIntent) => tradeIntent.amount > 0);
         if (purchases.length) await mutatePurchases(purchases);
-        queryClient.invalidateQueries([queryKeys.agent, queryKeys.ships]);
         props.onTradeSuccess();
+    }
+    function getAmountInStorage(tradeGood: TradeGood): number {
+        const inventoryItem = props.inventoryItems.find((inventoryItem) => inventoryItem.symbol === tradeGood.symbol);
+        if(inventoryItem) return inventoryItem.units ? inventoryItem.units : 0;
+        return 0;
     }
     return (
         <>
             <div className="flex flex-col">
                 <TradeGoodLegend />
                 {props.marketData.tradeGoods.sort((a, b) => a.symbol.localeCompare(b.symbol)).map((tradeGood) => (
-                    <TradeGoodRow onTradeIntent={handleTradeIntent} key={tradeGood.symbol} tradeGood={tradeGood} amountInStorage={props.inventoryItems.filter((item) => item.symbol === tradeGood.symbol).length} />
+                    <TradeGoodRow onTradeIntent={handleTradeIntent} key={tradeGood.symbol} tradeGood={tradeGood} amountInStorage={getAmountInStorage(tradeGood)} />
                 ))}
                 
             </div>
