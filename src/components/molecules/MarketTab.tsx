@@ -27,15 +27,14 @@ export default function  MarketTab(props: Props) {
             <div className="flex flex-col">
                 <TradeGoodLegend />
                 {props.marketData.tradeGoods.sort((a, b) => a.symbol.localeCompare(b.symbol)).map((tradeGood) => (
-                    <TradeGoodRow onTradeIntent={handleTradeIntent} key={tradeGood.symbol} tradeGood={tradeGood} amountInStorage={props.inventoryItems.filter((item) => item.symbol === tradeGood.symbol).length} />
+                    //<TradeGoodRow onTradeIntent={handleTradeIntent} key={tradeGood.symbol} tradeGood={tradeGood} amountInStorage={props.inventoryItems.filter((item) => item.symbol === tradeGood.symbol).length} />
+                    <TradeGoodRow onTradeIntent={handleTradeIntent} key={tradeGood.symbol} tradeGood={tradeGood} amountInStorage={1} />
                 ))}
                 
             </div>
-            {tradeIntents.length > 0 && (
-                <div className="flex flex-col h-40 rounded-xl pt-4 m-2">
-                    <TradeSummary tradeIntents={tradeIntents} />
-                </div>
-            )}
+            <div className="flex flex-col h-40 rounded-xl pt-4 m-2">
+                <TradeSummary tradeIntents={tradeIntents} />
+            </div>
         </>
         
     )

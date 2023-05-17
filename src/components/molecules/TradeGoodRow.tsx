@@ -38,12 +38,14 @@ export default function TradeGoodRow(props: Props) {
         const regex = /[^0-9\-]+/;
         if(value.match(regex)) return;
         const numValue = parseInt(value);
-        if(numValue && numValue > 0 && numValue > props.amountInStorage) return;
-        if(numValue && numValue !== 0) props.onTradeIntent(props.tradeGood.symbol, numValue, props.tradeGood.sellPrice);
+        if(!isNaN(numValue) && numValue < 0 && -numValue > props.amountInStorage) return;
+        console.log("numValue", numValue)
+        if(!isNaN(numValue))
+            props.onTradeIntent(props.tradeGood.symbol, numValue, props.tradeGood.sellPrice);
         setTradeValue(value);
     }
     function isMaxable() {
-        return props.amountInStorage > 0 && props.amountInStorage !== parseInt(tradeValue);
+        return props.amountInStorage > 0 && -props.amountInStorage !== parseInt(tradeValue);
     }
     return (
         <div className="flex flex-row gap-4 px-2 py-1.5 items-center odd:bg-neutral-900 last:rounded-b-xl">
@@ -51,10 +53,10 @@ export default function TradeGoodRow(props: Props) {
             <p className="w-1/5 text-center">{props.amountInStorage > 0 && props.amountInStorage}</p>
             <p className="w-1/5 text-center">{props.amountInStorage > 0 && props.tradeGood.sellPrice}</p>
             <div className="flex justify-center w-72 gap-2">
-                <button className="flex justify-center items-center bg-picton-blue rounded p-1" onClick={() => {validate(parseInt(tradeValue) - 10 + '') }}>
+                <button className="flex justify-center items-center bg-picton-blue rounded p-1" onClick={() => {validate(parseInt(tradeValue) + 10 + '') }}>
                     <p className="text-md">10x</p>
                 </button>
-                <button className="flex justify-center items-center bg-picton-blue rounded p-2" onClick={() => validate(parseInt(tradeValue) - 1 + '')}>
+                <button className="flex justify-center items-center bg-picton-blue rounded p-2" onClick={() => validate(parseInt(tradeValue) + 1 + '')}>
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 <input 
@@ -63,7 +65,7 @@ export default function TradeGoodRow(props: Props) {
                     value={tradeValue} onBlur={(e) => (e.target.value === "" || e.target.value === "-") && setTradeValue("0")} 
                     onChange={(e) => validate(e.target.value)}
                 />
-                <button className={`flex justify-center items-center rounded p-2 ${props.amountInStorage > parseInt(tradeValue) ? "bg-picton-blue" : "bg-neutral-600"}`} onClick={() => validate(parseInt(tradeValue) + 1 + '')}>
+                <button className={`flex justify-center items-center rounded p-2 ${-props.amountInStorage < parseInt(tradeValue) ? "bg-picton-blue" : "bg-neutral-600"}`} onClick={() => validate(parseInt(tradeValue) - 1 + '')}>
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
                 <button 
@@ -74,7 +76,7 @@ export default function TradeGoodRow(props: Props) {
                         rounded p-2 
                         ${!isMaxable() ? "bg-neutral-600" : "bg-picton-blue"} 
                     `} 
-                    onClick={() => isMaxable() ? validate(props.amountInStorage + '') : null}
+                    onClick={() => isMaxable() ? validate(-props.amountInStorage + '') : null}
                 >
                     <FontAwesomeIcon icon={faAngleDoubleRight} />
                 </button>
