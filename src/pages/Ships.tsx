@@ -15,11 +15,13 @@ function Ships() {
     const [traderMenuOpen, setTraderMenuOpen] = useState<boolean>(false);
     const [waypointSymbol, setWaypointSymbol] = useState<string>("");
     const [systemSymbol, setSystemSymbol] = useState<string>("");
+    const [shipSymbol, setShipSymbol] = useState<string>("");
 
-    function handleTraderMenuOpen(waypointSymbol: string, systemSymbol: string) {
+    function handleTraderMenuOpen(waypointSymbol: string, systemSymbol: string, symbol: string) {
       setTraderMenuOpen(true);
       setWaypointSymbol(waypointSymbol);
       setSystemSymbol(systemSymbol);
+      setShipSymbol(symbol);
     }
 
     return (
@@ -27,14 +29,14 @@ function Ships() {
           {isSuccess && (
             <>
               {shipData.map((ship) => (
-                  <Ship key={ship.symbol} ship={ship} openTraderMenu={(waypointSymbol, systemSymbol) => handleTraderMenuOpen(waypointSymbol, systemSymbol)} />
-              ))}
+                  <Ship key={ship.symbol} ship={ship} openTraderMenu={(waypointSymbol, systemSymbol) => handleTraderMenuOpen(waypointSymbol, systemSymbol, ship.symbol)} />
+                  ))}
             </>
           )}
           {isError && <p>There was an error while loading ships</p>}
           {traderMenuOpen && (
-              <TradeMenuModal sellableItems={[]} waypointSymbol={waypointSymbol} systemSymbol={systemSymbol} close={() => setTraderMenuOpen(false)}/>
-            )}
+              <TradeMenuModal shipSymbol={shipSymbol} sellableItems={[]} waypointSymbol={waypointSymbol} systemSymbol={systemSymbol} close={() => setTraderMenuOpen(false)}/>
+          )}
         </>
     )
 }

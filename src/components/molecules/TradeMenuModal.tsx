@@ -15,6 +15,7 @@ interface Props {
     waypointSymbol: string;
     systemSymbol: string;
     sellableItems: InventoryItem[];
+    shipSymbol: string;
 }
 
 function TradeMenuModal(props: Props) {
@@ -57,7 +58,7 @@ function TradeMenuModal(props: Props) {
                         {isSuccess && (
                             <>
                                 {selectedTab === "Market" ? (
-                                    <MarketTab inventoryItems={props.sellableItems} marketData={marketData} availableCredits={agentSuccess ? agentData.credits : 0} />
+                                    <MarketTab onTradeSuccess={props.close} shipSymbol={props.shipSymbol} inventoryItems={props.sellableItems} marketData={marketData} availableCredits={agentSuccess ? agentData.credits : 0} />
                                 ) : (
                                     <p>Exchange</p>
                                 )}
