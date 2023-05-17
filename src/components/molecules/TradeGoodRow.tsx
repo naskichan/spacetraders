@@ -38,10 +38,10 @@ export default function TradeGoodRow(props: Props) {
         const regex = /[^0-9\-]+/;
         if(value.match(regex)) return;
         const numValue = parseInt(value);
-        if(!isNaN(numValue) && numValue < 0 && -numValue > props.amountInStorage) return;
-        console.log("numValue", numValue)
-        if(!isNaN(numValue))
-            props.onTradeIntent(props.tradeGood.symbol, numValue, props.tradeGood.sellPrice);
+        if(!isNaN(numValue)) {
+            if(numValue < 0 && -numValue > props.amountInStorage) return;
+            props.onTradeIntent(props.tradeGood.symbol, numValue, numValue < 0 ? props.tradeGood.sellPrice : props.tradeGood.purchasePrice);
+        }
         setTradeValue(value);
     }
     function isMaxable() {

@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { queryKeys } from "../../queries/queryKeys";
 import { fetchMarket } from "../../queries/markets";
 import MarketTab from "./MarketTab";
+import { fetchAgent } from "../../queries/agents";
 
 interface Props {
     close: () => void;
@@ -19,8 +20,14 @@ interface Props {
 function TradeMenuModal(props: Props) {
     const {
         data: marketData,
-        isSuccess
+        isSuccess,
+        isError
     } = useQuery(queryKeys.market(props.waypointSymbol), () => fetchMarket(props.systemSymbol, props.waypointSymbol))
+    const {
+        data: agentData,
+        isSuccess: agentSuccess,
+        isError: isAgentError
+    } = useQuery(queryKeys.agent, fetchAgent);
     const [selectedTab, setSelectedTab] = useState<string>("Market");
     const navigate = useNavigate();
     return (
@@ -44,10 +51,13 @@ function TradeMenuModal(props: Props) {
                         <TradeModalTab label="Exchange" onSelect={() => setSelectedTab("Exchange")} selected={selectedTab === "Exchange"} />
                     </div>
                     <div className="bg-neutral-800 rounded-xl">
+                        {(isError || isAgentError) && (
+                            <p className="text-center text-poppy text-2xl font-bold">There was an error while loading data</p>
+                        )}
                         {isSuccess && (
                             <>
                                 {selectedTab === "Market" ? (
-                                    <MarketTab inventoryItems={props.sellableItems} marketData={marketData} />
+                                    <MarketTab inventoryItems={props.sellableItems} marketData={marketData} availableCredits={agentSuccess ? agentData.credits : 0} />
                                 ) : (
                                     <p>Exchange</p>
                                 )}
