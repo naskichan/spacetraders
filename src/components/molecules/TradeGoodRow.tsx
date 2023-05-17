@@ -62,7 +62,7 @@ export default function TradeGoodRow(props: Props) {
                 <input 
                     type="text" 
                     className="w-12 bg-neutral-600 rounded text-center" 
-                    value={tradeValue} onBlur={(e) => (e.target.value === "" || e.target.value === "-") && setTradeValue("0")} 
+                    value={tradeValue} onBlur={(e) => (e.target.value === "" || e.target.value === "-") && validate("0")} 
                     onChange={(e) => validate(e.target.value)}
                 />
                 <button className={`flex justify-center items-center rounded p-2 ${-props.amountInStorage < parseInt(tradeValue) ? "bg-picton-blue" : "bg-neutral-600"}`} onClick={() => validate(parseInt(tradeValue) - 1 + '')}>
